@@ -1,19 +1,25 @@
-import { Pressable, StyleSheet, Image } from "react-native";
+import { Pressable, Text, StyleSheet, Image } from "react-native";
 import { Colors } from "../../constants/colors";
+import { ChoiceItem } from "../../models/Choice";
+import { Sizes } from "../../constants/constants";
 
 type ChoiceProp = {
-  image: string;
-  id: string;
-  onPress: (id: string) => void;
+  item: ChoiceItem;
+  onPress: (index: number) => void;
 };
 
-export default function Choice({ onPress, id, image }: ChoiceProp) {
+export default function Choice({ onPress, item }: ChoiceProp) {
+  let content = <Text style={styles.fallbackTxt}>Choose a Photo</Text>;
+  if (item.imageUrl) {
+    content = <Image style={styles.image} source={{ uri: item.imageUrl }} />;
+  }
+
   return (
     <Pressable
-      onPress={() => onPress(id)}
+      onPress={() => onPress(item.index)}
       style={({ pressed }) => [styles.conatiner, pressed && styles.pressed]}
     >
-      <Image style={styles.image} source={{ uri: image }} />
+      {content}
     </Pressable>
   );
 }
@@ -26,6 +32,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.secondaryBackground,
     borderRadius: 10,
     overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
     width: "100%",
@@ -33,5 +41,9 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.7,
+  },
+  fallbackTxt: {
+    color: Colors.accent,
+    fontSize: Sizes.text,
   },
 });
