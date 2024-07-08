@@ -1,24 +1,33 @@
 import type { MaterialBottomTabScreenProps } from "react-native-paper";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from "@react-navigation/native";
+import { Choice } from "../models/Choice";
 
 export type TabNavigationList = {
   AddChoice: undefined;
   Choices: undefined;
-  MyChoices: undefined;
+  MyChoicesStack: NavigatorScreenParams<MyChoicesStackNavigationParamList>;
 };
 
 export type TabNavigationProps<T extends keyof TabNavigationList> =
   MaterialBottomTabScreenProps<TabNavigationList, T>;
 
-// export type HomeTabParamList = {
-//   Popular: undefined;
-//   Latest: undefined;
-// };
+export type MyChoicesStackNavigationParamList = {
+  MyChoices: undefined;
+  ChoiceDetails: {
+    choice: Choice;
+  };
+};
 
-// export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
-//   CompositeScreenProps<
-//     BottomTabScreenProps<HomeTabParamList, T>,
-//     RootStackScreenProps<keyof RootStackParamList>
-//   >;
+export type MyChoicesStackNavigationProps<
+  T extends keyof MyChoicesStackNavigationParamList
+> = CompositeScreenProps<
+  NativeStackScreenProps<MyChoicesStackNavigationParamList, T>,
+  TabNavigationProps<keyof TabNavigationList>
+>;
 
 declare global {
   namespace ReactNavigation {

@@ -8,14 +8,10 @@ import Button from "../../components/ui/Button";
 import OutlinedButton from "../../components/ui/OutlinedButton";
 import { addChoice } from "../../http/myChoices";
 import { Colors } from "../../constants/colors";
-
-type ImageData = {
-  imageUrl: string;
-  isValid: boolean;
-};
+import type * as Types from "../../utils/types";
 
 export default function AddChoice() {
-  const [images, setImages] = useState<ImageData[]>([
+  const [images, setImages] = useState<Types.ImageData[]>([
     { isValid: true, imageUrl: "" },
     { isValid: true, imageUrl: "" },
   ]);
@@ -60,9 +56,9 @@ export default function AddChoice() {
       Alert.alert("Validation Error", "Please check all failed input data");
       return;
     }
-    const items: Omit<ImageData, "isValid">[] = images;
+    const items: Types.Images = images;
     addChoice({ items, title });
-    navigation.navigate("MyChoices");
+    navigation.navigate("MyChoicesStack", { screen: "MyChoices" });
   };
 
   const handleCancel = () => {
@@ -113,7 +109,7 @@ const styles = StyleSheet.create({
   imagesContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 200,
+    height: 200,
   },
   imageError: {
     borderColor: Colors.accent,
