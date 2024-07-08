@@ -1,30 +1,38 @@
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import SafeAreaOverlay from "../../components/overlays/SafeAreaOverlay";
 import Choice from "../../components/choise/Choise";
+import { getChoice } from "../../http/choises";
+import { Choice as ChoiceModel } from "../../models/Choice";
 
 export default function Choices() {
-  const handleMakeChoice = (index: number) => {
-    console.log(index);
+  const [currentChoice, setCurrentChoice] = useState<ChoiceModel>();
+
+  const getNewChoice = async () => {
+    const choice = await getChoice();
+    setCurrentChoice(choice);
+  };
+
+  useEffect(() => {
+    getNewChoice();
+  }, []);
+
+  const handleMakeChoice = async (index: number) => {
+    await getNewChoice();
   };
 
   return (
     <SafeAreaOverlay style={styles.container}>
-      <Choice
-        onPress={handleMakeChoice}
-        item={{
-          index: 1,
-          imageUrl:
-            "https://ae01.alicdn.com/kf/S532d9894112f4989a7909c914e30118f5.jpg_640x640Q90.jpg_.webp",
-        }}
-      />
-      <Choice
-        onPress={handleMakeChoice}
-        item={{
-          index: 2,
-          imageUrl:
-            "https://pics.craiyon.com/2023-07-18/19ef5828a2504f81a55bdc39240e94ca.webp",
-        }}
-      />
+      {currentChoice?.items.map((item, index) => (
+        <Choice
+          key={index}
+          onPress={handleMakeChoice}
+          item={{
+            index,
+            imageUrl: item.imageUrl,
+          }}
+        />
+      ))}
     </SafeAreaOverlay>
   );
 }

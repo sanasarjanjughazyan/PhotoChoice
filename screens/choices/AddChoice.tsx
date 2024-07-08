@@ -1,15 +1,26 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, TextInput, ScrollView, StyleSheet, Alert } from "react-native";
 import Choice from "../../components/choise/Choise";
 import SafeAreaOverlay from "../../components/overlays/SafeAreaOverlay";
 import * as ImagePicker from "expo-image-picker";
 import Button from "../../components/ui/Button";
 import OutlinedButton from "../../components/ui/OutlinedButton";
+import { addChoice } from "../../http/myChoices";
+import { Colors } from "../../constants/colors";
+
+type ImageData = {
+  imageUrl: string;
+  isValid: boolean;
+};
 
 export default function AddChoice() {
-  const [imageOne, setImageOne] = useState("");
-  const [imageTwo, setImageTwo] = useState("");
+  const [images, setImages] = useState<ImageData[]>([
+    { isValid: true, imageUrl: "" },
+    { isValid: true, imageUrl: "" },
+  ]);
+  const [title, setTitle] = useState("");
+
   const navigation = useNavigation();
 
   const handleChooseImage = async (index: number) => {
@@ -21,14 +32,37 @@ export default function AddChoice() {
       allowsMultipleSelection: false,
     });
 
+    let newImageData = { imageUrl: "", isValid: false };
     if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      index === 0 ? setImageOne(uri) : setImageTwo(uri);
+      newImageData = { imageUrl: result.assets[0].uri, isValid: true };
     }
+
+    setImages((prev) => {
+      const data = [...prev];
+      data[index] = newImageData;
+      return data;
+    });
+  };
+
+  const handleChangeTitle = (value: string) => {
+    setTitle(value);
+  };
+
+  const validate = () => {
+    let isValid = images.every((imageData) => imageData.isValid);
+    isValid = isValid && title.trim().length > 0;
+    return isValid;
   };
 
   const handleCreate = () => {
-    navigation.goBack();
+    if (!validate()) {
+      // TODO: customize alert
+      Alert.alert("Validation Error", "Please check all failed input data");
+      return;
+    }
+    const items: Omit<ImageData, "isValid">[] = images;
+    addChoice({ items, title });
+    navigation.navigate("MyChoices");
   };
 
   const handleCancel = () => {
@@ -41,15 +75,23 @@ export default function AddChoice() {
         <ScrollView style={{ width: "100%" }} alwaysBounceVertical={false}>
           <View>
             <View style={styles.imagesContainer}>
-              <Choice
-                item={{ index: 0, imageUrl: imageOne }}
-                onPress={handleChooseImage}
-              />
-              <Choice
-                item={{ index: 1, imageUrl: imageTwo }}
-                onPress={handleChooseImage}
-              />
+              {images.map((imageData, index) => (
+                <Choice
+                  key={index}
+                  item={{ index, imageUrl: imageData.imageUrl }}
+                  onPress={handleChooseImage}
+                  style={!imageData.isValid && styles.imageError}
+                />
+              ))}
             </View>
+            <TextInput
+              autoCapitalize="sentences"
+              autoCorrect={true}
+              style={styles.textInput}
+              placeholder="Title"
+              value={title}
+              onChangeText={handleChangeTitle}
+            />
           </View>
         </ScrollView>
         <View style={styles.buttonContainer}>
@@ -66,12 +108,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
+    padding: 8,
   },
   imagesContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 8,
     minHeight: 200,
+  },
+  imageError: {
+    borderColor: Colors.accent,
+  },
+  textInput: {
+    color: Colors.primaryText,
+    borderColor: Colors.secondaryBackground,
+    borderWidth: 1,
+    borderRadius: 10,
+    margin: 8,
+    height: 50,
+    padding: 8,
   },
   buttonContainer: {
     width: "100%",

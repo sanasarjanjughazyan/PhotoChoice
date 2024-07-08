@@ -1,14 +1,22 @@
-import { Pressable, Text, StyleSheet, Image } from "react-native";
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  Image,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 import { Colors } from "../../constants/colors";
-import { ChoiceItem } from "../../models/Choice";
+import { ChoiceItemWithIndex } from "../../models/Choice";
 import { Sizes } from "../../constants/constants";
 
 type ChoiceProp = {
-  item: ChoiceItem;
+  item: ChoiceItemWithIndex;
   onPress: (index: number) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
-export default function Choice({ onPress, item }: ChoiceProp) {
+export default function Choice({ onPress, item, style }: ChoiceProp) {
   let content = <Text style={styles.fallbackTxt}>Choose a Photo</Text>;
   if (item.imageUrl) {
     content = <Image style={styles.image} source={{ uri: item.imageUrl }} />;
@@ -17,7 +25,11 @@ export default function Choice({ onPress, item }: ChoiceProp) {
   return (
     <Pressable
       onPress={() => onPress(item.index)}
-      style={({ pressed }) => [styles.conatiner, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.conatiner,
+        pressed && styles.pressed,
+        style,
+      ]}
     >
       {content}
     </Pressable>
