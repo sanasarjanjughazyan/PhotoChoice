@@ -1,16 +1,13 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Colors } from "../../constants/colors";
-import { Sizes } from "../../constants/constants";
+import { Sizes } from "../../constants/sizes";
 
-type OutlinedButtonProps = {
+type ButtonProps = {
   title: string;
   onPress: () => void;
 };
 
-export default function OutlinedButton({
-  title,
-  onPress,
-}: OutlinedButtonProps) {
+export default function Button({ title, onPress }: ButtonProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -26,16 +23,15 @@ const styles = StyleSheet.create({
     padding: 8,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Colors.primary,
     width: "40%",
     borderRadius: 20,
-    borderWidth: 2,
-    borderColor: Colors.primary,
   },
   pressed: {
     opacity: 0.7,
   },
   title: {
-    color: Colors.secondaryText,
+    color: Colors.primaryText,
     fontSize: Sizes.text,
   },
 });

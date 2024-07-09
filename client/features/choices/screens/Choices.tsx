@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import SafeAreaOverlay from "../../components/overlays/SafeAreaOverlay";
-import Choice from "../../components/choise/Choise";
-import { getChoice } from "../../http/choises";
-import { Choice as ChoiceModel } from "../../models/Choice";
+
+import SafeAreaOverlay from "../../../shared/components/overlays/SafeAreaOverlay";
+import Choice from "../../../shared/components/choise/Choise";
+
+import { getChoice } from "../../../http/choises";
+import { Choice as ChoiceModel } from "../../../models/Choice";
 
 export default function Choices() {
   const [currentChoice, setCurrentChoice] = useState<ChoiceModel>();

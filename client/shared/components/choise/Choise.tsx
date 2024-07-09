@@ -7,8 +7,8 @@ import {
   ViewStyle,
 } from "react-native";
 import { Colors } from "../../constants/colors";
-import { ChoiceItemWithIndex } from "../../models/Choice";
-import { Sizes } from "../../constants/constants";
+import { Sizes } from "../../constants/sizes";
+import { ChoiceItemWithIndex } from "../../../models/Choice";
 
 type ChoiceProp = {
   item: ChoiceItemWithIndex;

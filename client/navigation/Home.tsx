@@ -1,48 +1,20 @@
-import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {
-  TabNavigationList,
-  MyChoicesStackNavigationParamList,
-} from "./utils/NavigationTypes";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "./constants/colors";
-import { Sizes } from "./constants/constants";
+import { TabNavigationList } from "./navigationTypes";
 
-import Choices from "./screens/choices/Choices";
-import AddChoice from "./screens/choices/AddChoice";
-import MyChoices from "./screens/user/MyChoices";
-import ChoiceDetails from "./screens/user/ChoiceDetails";
+import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "../shared/constants/colors";
+import { Sizes } from "../shared/constants/sizes";
+
+import MyChoicesScreens from "./MyChoices";
+import Choices from "../features/choices/screens/Choices";
+import AddChoice from "../features/addChoice/screens/AddChoice";
 
 const Tab = createMaterialBottomTabNavigator<TabNavigationList>();
-const Stack = createNativeStackNavigator<MyChoicesStackNavigationParamList>();
 
-const MyChoicesScreens = () => {
+export default function Home() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerTintColor: Colors.primaryText,
-      }}
-    >
-      <Stack.Screen
-        name="MyChoices"
-        component={MyChoices}
-        options={{ title: "My Choices" }}
-      />
-      <Stack.Screen
-        name="ChoiceDetails"
-        component={ChoiceDetails}
-        options={({ route }) => ({ title: route.params.choice.title })}
-      />
-    </Stack.Navigator>
-  );
-};
-
-export default function App() {
-  const BottomTabScreens = () => {
-    return (
+    <NavigationContainer>
       <Tab.Navigator
         activeColor={Colors.primary}
         barStyle={{ backgroundColor: Colors.secondaryBackground }}
@@ -91,15 +63,6 @@ export default function App() {
           }}
         />
       </Tab.Navigator>
-    );
-  };
-
-  return (
-    <>
-      <StatusBar style="dark" />
-      <SafeAreaProvider>
-        <NavigationContainer>{BottomTabScreens()}</NavigationContainer>
-      </SafeAreaProvider>
-    </>
+    </NavigationContainer>
   );
 }

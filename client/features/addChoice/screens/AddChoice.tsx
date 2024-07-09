@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, TextInput, ScrollView, StyleSheet, Alert } from "react-native";
-import Choice from "../../components/choise/Choise";
-import SafeAreaOverlay from "../../components/overlays/SafeAreaOverlay";
 import * as ImagePicker from "expo-image-picker";
-import Button from "../../components/ui/Button";
-import OutlinedButton from "../../components/ui/OutlinedButton";
-import { addChoice } from "../../http/myChoices";
-import { Colors } from "../../constants/colors";
-import type * as Types from "../../utils/types";
+
+import Choice from "../../../shared/components/choise/Choise";
+import SafeAreaOverlay from "../../../shared/components/overlays/SafeAreaOverlay";
+import Button from "../../../shared/components/ui/Button";
+import OutlinedButton from "../../../shared/components/ui/OutlinedButton";
+
+import { addChoice } from "../../../http/myChoices";
+import { Colors } from "../../../shared/constants/colors";
+import type * as Types from "../../../shared/types/choiceItem";
 
 export default function AddChoice() {
   const [images, setImages] = useState<Types.ImageData[]>([

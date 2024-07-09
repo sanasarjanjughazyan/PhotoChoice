@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View, Image } from "react-native";
-import { Choice } from "../../models/Choice";
-import { Colors } from "../../constants/colors";
-import { Sizes } from "../../constants/constants";
+import { Choice } from "../../../models/Choice";
+import { Colors } from "../../../shared/constants/colors";
+import { Sizes } from "../../../shared/constants/sizes";
 
 type MyChoiceItemProps = {
   choice: Choice;
